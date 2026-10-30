@@ -2,5 +2,98 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
+}
+
+#sky {
+  position: fixed;
+  inset: 0;
   background: linear-gradient(to bottom, #0b1026, #2a1f5c);
+}
+
+/* day sky fades in over the night sky */
+#sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #4aa8ff, #bfe6ff);
+  opacity: 0;
+  transition: opacity 1.5s;
+}
+#sky.day::before { opacity: 1; }
+
+/* stars */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+  transition: opacity 1s;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+#sky.day .star { opacity: 0 !important; animation: none; }
+
+/* meteors */
+.meteor {
+  position: absolute;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, white);
+  transform: rotate(135deg);
+  animation: shoot 1.2s linear forwards;
+}
+@keyframes shoot {
+  from { transform: rotate(135deg) translateX(0); opacity: 1; }
+  to   { transform: rotate(135deg) translateX(900px); opacity: 0; }
+}
+#sky.day .meteor { display: none; }
+
+/* the bright star / sun */
+#sun {
+  position: absolute;
+  top: 12%;
+  right: 12%;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 0 20px 8px white, 0 0 60px 20px rgba(255, 255, 255, 0.5);
+  transition: all 1.5s;
+}
+#sky.day #sun {
+  width: 90px;
+  height: 90px;
+  background: #ffd54a;
+  box-shadow: 0 0 60px 30px rgba(255, 213, 74, 0.6);
+}
+
+/* clouds */
+.cloud {
+  position: absolute;
+  left: -300px;
+  width: 140px;
+  height: 45px;
+  background: white;
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 1.5s;
+  animation: drift 60s linear infinite;
+}
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+}
+.cloud::before { width: 60px; height: 60px; top: -30px; left: 20px; }
+.cloud::after  { width: 75px; height: 75px; top: -40px; left: 60px; }
+#sky.day .cloud { opacity: 0.9; }
+@keyframes drift {
+  from { left: -300px; }
+  to   { left: 110%; }
 }
